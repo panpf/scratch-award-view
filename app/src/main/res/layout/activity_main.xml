@@ -1,0 +1,18 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true">
+    <TextView
+        android:text="再来一瓶"
+        android:gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"/>
+
+    <me.xiaopan.android.rubberview.RubberView
+        android:id="@+id/rubberView_main"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"/>
+</FrameLayout>
