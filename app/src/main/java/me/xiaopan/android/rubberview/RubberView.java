@@ -156,6 +156,10 @@ public class RubberView extends View {
                     }
                 }
 
+                if(getParent() != null){
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
+
                 break;
         }
         if(!moved){
