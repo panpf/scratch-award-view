@@ -48,6 +48,12 @@ public class RubberView extends View {
     private float moveX;
     private float moveY;
 
+    private boolean moved;
+
+    private View hintView;
+    private Rect hintViewGlobalVisibleRect;
+    private OnAcrossHintViewListener onAcrossHintViewListener;
+
     public RubberView(Context context) {
         this(context, null, 0);
     }
@@ -126,17 +132,32 @@ public class RubberView extends View {
             case  MotionEvent.ACTION_DOWN :
                 downX = event.getX();
                 downY = event.getY();
+                moved = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+                moved = true;
                 moveX = event.getX();
                 moveY = event.getY();
                 trackBitmapCanvas.drawLine(downX, downY, moveX, moveY, linePaint);
                 downX = moveX;
                 downY = moveY;
                 invalidate();
+
+                if(hintView != null && onAcrossHintViewListener != null){
+                    if(hintViewGlobalVisibleRect == null){
+                        hintViewGlobalVisibleRect = new Rect();
+                        hintView.getGlobalVisibleRect(hintViewGlobalVisibleRect);
+                    }
+                    if(hintViewGlobalVisibleRect.contains((int)event.getRawX(), (int)event.getRawY())){
+                        onAcrossHintViewListener.onAcrossHintView(hintView);
+                    }
+                }
+
                 break;
         }
-        super.onTouchEvent(event);
+        if(!moved){
+            super.onTouchEvent(event);
+        }
         return true;
     }
 
@@ -170,6 +191,16 @@ public class RubberView extends View {
      */
     public void setStrokeWidth(int strokeWidth) {
         this.linePaint.setStrokeWidth(strokeWidth);
+    }
+
+    /**
+     * 激活监听划过提示视图的功能
+     * @param hintView 提示视图，当用户划过此视图的时候就会回调监听器，一般来说此视图应该是隐藏在RubberView之下的中奖提示视图
+     * @param onAcrossHintViewListener 当用户划过提示视图的时候就会回调此监听器
+     */
+    public void enableAcrossMonitor(View hintView, OnAcrossHintViewListener onAcrossHintViewListener){
+        this.hintView = hintView;
+        this.onAcrossHintViewListener = onAcrossHintViewListener;
     }
 
     public static Rect computeSrcRect(Point sourceSize, Point targetSize, ImageView.ScaleType scaleType){
@@ -214,5 +245,9 @@ public class RubberView extends View {
             }
             return new Rect(srcLeft, srcTop, srcLeft+srcWidth, srcTop+srcHeight);
         }
+    }
+
+    public interface OnAcrossHintViewListener{
+        public void onAcrossHintView(View hintView);
     }
 }

@@ -29,10 +29,16 @@
 扩展功能：
 >* 调用setMaskImage()方法自定义遮罩图片，默认的是灰色
 >* 调用setStrokeWidth()方法自定义画笔宽度
+>* 调用enableAcrossMonitor()方法监听用户划过的区域，你可以指定一个隐藏在RubberView下面的视图，当用户划过这个视图的时候就会触发回调
 
 ##Downloads
->* [android-rubber-view-1.0.0.jar](https://github.com/xiaopansky/RubberView/raw/master/releases/android-rubber-view-1.0.0.jar)
->* [android-rubber-view-1.0.0-with-src.jar](https://github.com/xiaopansky/RubberView/raw/master/releases/android-rubber-view-1.0.0-with-src.jar)
+>* [android-rubber-view-1.1.0.jar](https://github.com/xiaopansky/RubberView/raw/master/releases/android-rubber-view-1.1.0.jar)
+>* [android-rubber-view-1.1.0-with-src.jar](https://github.com/xiaopansky/RubberView/raw/master/releases/android-rubber-view-1.1.0-with-src.jar)
+
+##Change log
+
+####1.1.0
+>*  增加enableAcrossMonitor()方法，用于监听用户的滑动操作，实现滑过指定视图的时候触发回调
 
 ##License
 ```java
