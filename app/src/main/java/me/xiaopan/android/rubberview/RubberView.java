@@ -53,6 +53,7 @@ public class RubberView extends View {
     private View hintView;
     private Rect hintViewGlobalVisibleRect;
     private OnAcrossHintViewListener onAcrossHintViewListener;
+    private boolean allowAcrossCallback;
 
     public RubberView(Context context) {
         this(context, null, 0);
@@ -133,6 +134,7 @@ public class RubberView extends View {
                 downX = event.getX();
                 downY = event.getY();
                 moved = false;
+                allowAcrossCallback = hintView != null && onAcrossHintViewListener != null;
                 break;
             case MotionEvent.ACTION_MOVE:
                 moved = true;
@@ -143,13 +145,14 @@ public class RubberView extends View {
                 downY = moveY;
                 invalidate();
 
-                if(hintView != null && onAcrossHintViewListener != null){
+                if(allowAcrossCallback){
                     if(hintViewGlobalVisibleRect == null){
                         hintViewGlobalVisibleRect = new Rect();
                         hintView.getGlobalVisibleRect(hintViewGlobalVisibleRect);
                     }
                     if(hintViewGlobalVisibleRect.contains((int)event.getRawX(), (int)event.getRawY())){
                         onAcrossHintViewListener.onAcrossHintView(hintView);
+                        allowAcrossCallback = false;
                     }
                 }
 
