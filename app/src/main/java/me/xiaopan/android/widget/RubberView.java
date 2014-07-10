@@ -125,7 +125,7 @@ public class RubberView extends View{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+        return isEnabled() && gestureDetector.onTouchEvent(event);
     }
 
     /**
@@ -228,6 +228,9 @@ public class RubberView extends View{
 
         @Override
         public boolean onDown(MotionEvent event) {
+            if(getParent() != null){
+                getParent().requestDisallowInterceptTouchEvent(true);
+            }
             downX = event.getX();
             downY = event.getY();
             allowAcrossCallback = hintView != null && onAcrossHintViewListener != null;
@@ -241,7 +244,9 @@ public class RubberView extends View{
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            performClick();
+            if(isEnabled() && isClickable()){
+                performClick();
+            }
             return true;
         }
 
@@ -263,10 +268,6 @@ public class RubberView extends View{
                     onAcrossHintViewListener.onAcrossHintView(hintView);
                     allowAcrossCallback = false;
                 }
-            }
-
-            if(getParent() != null){
-                getParent().requestDisallowInterceptTouchEvent(true);
             }
             return true;
         }
