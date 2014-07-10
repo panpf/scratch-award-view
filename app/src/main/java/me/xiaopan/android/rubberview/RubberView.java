@@ -27,11 +27,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Xfermode;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-public class RubberView extends View {
+public class RubberView extends View{
     private Paint drawPaint;
     private Bitmap trackBitmap; // 轨迹图片，一会儿要在此图片上画滑动轨迹，然后通过Xfermode技术同遮罩层图片融合就能实现涂抹的效果
     private Canvas trackBitmapCanvas;
@@ -43,17 +44,10 @@ public class RubberView extends View {
     private Rect dstRect;
     private Rect srcRect;
 
-    private float downX;
-    private float downY;
-    private float moveX;
-    private float moveY;
-
-    private boolean moved;
-
     private View hintView;
-    private Rect hintViewGlobalVisibleRect;
     private OnAcrossHintViewListener onAcrossHintViewListener;
-    private boolean allowAcrossCallback;
+
+    private GestureDetector gestureDetector;
 
     public RubberView(Context context) {
         this(context, null, 0);
@@ -78,6 +72,8 @@ public class RubberView extends View {
         linePaint.setStrokeWidth(30); // 笔宽
 
         xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT);
+
+        gestureDetector = new GestureDetector(getContext(), new EventHandleListener());
     }
 
     @Override
@@ -129,43 +125,7 @@ public class RubberView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
-            case  MotionEvent.ACTION_DOWN :
-                downX = event.getX();
-                downY = event.getY();
-                moved = false;
-                allowAcrossCallback = hintView != null && onAcrossHintViewListener != null;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                moved = true;
-                moveX = event.getX();
-                moveY = event.getY();
-                trackBitmapCanvas.drawLine(downX, downY, moveX, moveY, linePaint);
-                downX = moveX;
-                downY = moveY;
-                invalidate();
-
-                if(allowAcrossCallback){
-                    if(hintViewGlobalVisibleRect == null){
-                        hintViewGlobalVisibleRect = new Rect();
-                        hintView.getGlobalVisibleRect(hintViewGlobalVisibleRect);
-                    }
-                    if(hintViewGlobalVisibleRect.contains((int)event.getRawX(), (int)event.getRawY())){
-                        onAcrossHintViewListener.onAcrossHintView(hintView);
-                        allowAcrossCallback = false;
-                    }
-                }
-
-                if(getParent() != null){
-                    getParent().requestDisallowInterceptTouchEvent(true);
-                }
-
-                break;
-        }
-        if(!moved){
-            super.onTouchEvent(event);
-        }
-        return true;
+        return gestureDetector.onTouchEvent(event);
     }
 
     /**
@@ -256,5 +216,68 @@ public class RubberView extends View {
 
     public interface OnAcrossHintViewListener{
         public void onAcrossHintView(View hintView);
+    }
+
+    private class EventHandleListener implements GestureDetector.OnGestureListener{
+        private float downX;
+        private float downY;
+        private float moveX;
+        private float moveY;
+        private boolean allowAcrossCallback;
+        private Rect hintViewGlobalVisibleRect;
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            downX = event.getX();
+            downY = event.getY();
+            allowAcrossCallback = hintView != null && onAcrossHintViewListener != null;
+            return true;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            performClick();
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent event, float distanceX, float distanceY) {
+            moveX = event.getX();
+            moveY = event.getY();
+            trackBitmapCanvas.drawLine(downX, downY, moveX, moveY, linePaint);
+            downX = moveX;
+            downY = moveY;
+            invalidate();
+
+            if(allowAcrossCallback){
+                if(hintViewGlobalVisibleRect == null){
+                    hintViewGlobalVisibleRect = new Rect();
+                    hintView.getGlobalVisibleRect(hintViewGlobalVisibleRect);
+                }
+                if(hintViewGlobalVisibleRect.contains((int)event.getRawX(), (int)event.getRawY())){
+                    onAcrossHintViewListener.onAcrossHintView(hintView);
+                    allowAcrossCallback = false;
+                }
+            }
+
+            if(getParent() != null){
+                getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
     }
 }
