@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import me.xiaopan.android.rubberview.R;
-import me.xiaopan.android.rubberview.RubberView;
+import me.xiaopan.android.widget.RubberView;
 
 public class MainActivity extends Activity {
 

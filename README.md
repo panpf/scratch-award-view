@@ -38,13 +38,14 @@
 ##Change log
 
 ####1.1.2
->*  修复单击事件不灵敏的BUG
+>* 修复单击事件不灵敏的BUG
+>* RubberView包名改为me.xiaopan.android.widget
 
 ####1.1.1
->*  修复当被ScrollView包括时，无法正常滑动的BUG
+>* 修复当被ScrollView包括时，无法正常滑动的BUG
 
 ####1.1.0
->*  增加enableAcrossMonitor()方法，用于监听用户的滑动操作，实现滑过指定视图的时候触发回调
+>* 增加enableAcrossMonitor()方法，用于监听用户的滑动操作，实现滑过指定视图的时候触发回调
 
 ##License
 ```java
