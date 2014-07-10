@@ -19,7 +19,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"/>
 
-    <me.xiaopan.android.rubberview.RubberView
+    <me.xiaopan.android.widget.RubberView
         android:id="@+id/rubberView_main"
         android:layout_width="200dp"
         android:layout_height="100dp"
