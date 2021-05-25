@@ -1,30 +1,15 @@
+# 停止维护 仅供查考
+
 # ![logo_image] ScratchAwardView
 
 ![Platform][platform_image]
 [![API][min_api_image]][min_api_link]
-[![Release Version][release_version_image]][release_version-link]
 
 这是一个刮刮卡组件，用于实现刮奖效果
 
 ![Sample](docs/sample.png)
 
 ## 开始使用
-
-### 1. 导入 ScratchAwardView
-
-在 app 的 build.gradle 文件的 dependencies 节点中加入依赖
-
-```groovy
-dependencies{
-	implementation 'me.panpf:scratch-award-view:$lastVersionName'
-}
-```
-
-请自行替换 `$lastVersionName` 为最新的版本：[![Release Version][release_version_image]][release_version-link] `（不要v）`
-
-最低支持 `Android 2.3`
-
-### 2. 在布局中使用
 
 你只需将 ScratchAwardView 覆盖在中奖提示语之上即可，这样的用法很灵活，因此你可以决定你的中奖提示语是一段文字或者一张图片，如下所示：
 
@@ -73,5 +58,3 @@ dependencies{
 [platform_image]: https://img.shields.io/badge/Platform-Android-brightgreen.svg
 [min_api_image]: https://img.shields.io/badge/API-10%2B-orange.svg
 [min_api_link]: https://android-arsenal.com/api?level=10
-[release_version_image]: https://img.shields.io/github/release/panpf/scratch-award-view.svg
-[release_version-link]: https://github.com/panpf/scratch-award-view/releases
